@@ -1,38 +1,84 @@
+body{
+  background-color: #607d8b;
+  color: #FAFAFA;
+  font-size: 18px;
+  font-family: math;
+}
+
+
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App>h1{
+  color: #263238;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* input css */
+
+label{
+  padding: 8px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+input{
+  outline: none;
+}
+
+/* list css */
+
+.showList{
   display: flex;
-  flex-direction: column;
+}
+.listContent{
+  flex: 1;
+}
+
+ul{
+  
+  list-style-type: none;
+  width: 262px;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin: 20px 596px;
+ 
+ 
 }
 
-.App-link {
-  color: #61dafb;
+ul li{
+ 
+  font-size: 20px;
+  text-align: center;
+  background-color: #4DB6AC;
+  border: 1px solid black;
+  margin-bottom: 8px;
+ 
+  
+ 
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.del-icon{
+  color: #D81B60;
+  font-size: 20px;
+  cursor: pointer;
+  float: right;
+  
 }
+
+.update{
+  color: #455A64;
+  float: right;
+}
+
+.updateButton{
+  background-color: #4DB6AC;
+  outline: none;
+  border: none;
+}
+
+.updateButton:focus{
+  background-color:rosybrown ;
+
+}
+
+
+
