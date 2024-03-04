@@ -8,6 +8,12 @@ const AppContextProvider = ({ children }) => {
   const [toggle, setToggle] = useState(true);
   const [editTask, setEditTask] = useState(null);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    addTodo(addTask); 
+    setTask("");
+  };
+
 
   const addTodo = (newTodoList) => {
     if (!newTodoList) {
@@ -63,7 +69,8 @@ const AppContextProvider = ({ children }) => {
     toggle,
     setToggle,
     editTask,
-    setEditTask
+    setEditTask,
+    handleSubmit
 
   };
 

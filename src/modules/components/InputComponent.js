@@ -3,13 +3,9 @@ import { AppContext } from '../../context/AppContextProvider';
 
 function InputComponent() {
   
-  const { addTask, setTask, addTodo ,toggle} = useContext(AppContext);
+  const { addTask, setTask, handleSubmit,toggle} = useContext(AppContext);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    addTodo(addTask); 
-    setTask("");
-  };
+ 
 
   return (
     <div>
