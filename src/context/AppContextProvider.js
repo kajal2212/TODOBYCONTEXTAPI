@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AppContext = createContext();
 
@@ -8,55 +8,83 @@ const AppContextProvider = ({ children }) => {
   const [toggle, setToggle] = useState(true);
   const [editTask, setEditTask] = useState(null);
 
+  const getLocalItems = () => {
+    try {
+      const storedItems = localStorage.getItem('listOfTask');
+      return storedItems ? JSON.parse(storedItems) : [];
+    } catch (error) {
+      console.error('Error retrieving data from local storage:', error);
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    try {
+      const localItems = getLocalItems();
+      setTodoList(prevTodoList => [...prevTodoList, ...localItems]);
+      console.log('Todo list after setting from local storage:', localItems);
+    } catch (error) {
+      console.error('Error setting todo list from local storage:', error);
+    }
+  }, []);
+  
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('listOfTask', JSON.stringify(todoList));
+    } catch (error) {
+      console.error('Error storing todo list in local storage:', error);
+    }
+  }, [todoList]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTodo(addTask); 
-    setTask("");
+    addTodo(addTask);
+    setTask('');
   };
-
 
   const addTodo = (newTodoList) => {
-    if (!newTodoList) {
-
-      alert("please fill the task");
-
-    }
-    else if (newTodoList && !toggle) {
-      
-      setTodoList(
-        todoList.map((listItem) => {
-          if (listItem.id === editTask) {
-            return { ...listItem, name: newTodoList }
-          }
-          return listItem;
-        }
-        )
-      )
-      setToggle(true);
-
-    }
-    else {
-      const allNewTodoList = { id: new Date().getTime().toString(), name: newTodoList }
-      setTodoList([...todoList, allNewTodoList]);
+    try {
+      if (!newTodoList) {
+        alert('Please fill the task');
+      } else if (newTodoList && !toggle) {
+        setTodoList((prevTodoList) =>
+          prevTodoList.map((listItem) => {
+            if (listItem.id === editTask) {
+              return { ...listItem, name: newTodoList };
+            }
+            return listItem;
+          })
+        );
+        setToggle(true);
+      } else {
+        const allNewTodoList = { id: new Date().getTime().toString(), name: newTodoList };
+        setTodoList((prevTodoList) => [...prevTodoList, allNewTodoList]);
+      }
+    } catch (error) {
+      console.error('Error adding todo item:', error);
     }
   };
 
-  const removeTask = (index) => {
-    const newList = todoList.filter((listItem) => { return index !== listItem.id });
-    setTodoList(newList);
+  const removeTask = (id) => {
+    try {
+      const newList = todoList.filter((listItem) => listItem.id !== id);
+      setTodoList(newList);
+    } catch (error) {
+      console.error('Error removing todo item:', error);
+    }
   };
 
   const updateTask = (id) => {
-    let newUpdatedTask = todoList.find((listItem) => {
-      return listItem.id === id
-    });
-    setToggle(false);
-    setTask(newUpdatedTask.name);
-    setEditTask(id);
-
-  }
-
-
+    try {
+      let newUpdatedTask = todoList.find((listItem) => listItem.id === id);
+      setToggle(false);
+      setTask(newUpdatedTask.name);
+      setEditTask(id);
+    } catch (error) {
+      console.error('Error updating todo item:', error);
+    }
+  };
 
   const contextValue = {
     addTask,
@@ -70,8 +98,8 @@ const AppContextProvider = ({ children }) => {
     setToggle,
     editTask,
     setEditTask,
-    handleSubmit
-
+    handleSubmit,
+    getLocalItems,
   };
 
   return (
