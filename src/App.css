@@ -5,7 +5,25 @@ body{
   font-family: math;
 }
 
+/* auth0 css */
+.loginbutton,.logoutbutton{
+  background-color: #4db6ac;
+  width: 90px;
+  height: 30px;
+}
 
+.loginbutton:focus{
+  background-color: #b71c1c70;
+}
+
+.logoutbutton:focus{
+  background-color: #D81B60;
+}
+
+
+
+
+/* app css */
 .App {
   text-align: center;
 }

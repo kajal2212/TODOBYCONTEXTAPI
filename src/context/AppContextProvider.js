@@ -1,18 +1,38 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const AppContext = createContext();
+
+
+
 
 const AppContextProvider = ({ children }) => {
   const [addTask, setTask] = useState('');
   const [todoList, setTodoList] = useState([]);
   const [toggle, setToggle] = useState(true);
   const [editTask, setEditTask] = useState(null);
+  const{user,loginWithRedirect,isAuthenticated,logout}=useAuth0();
+   console.log(user);
+
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
     addTodo(addTask); 
     setTask("");
   };
+
+  // const getLocalItems  = () =>{
+  //   let storedItems = localStorage.getItem('listOfTask');
+  //   console.log(storedItems); 
+  
+  //   if(storedItems){
+  //     return JSON.parse(localStorage.getItem('listOfTask'));
+    
+  // }else{
+  //   return [];
+  // }
+  // }
 
 
   const addTodo = (newTodoList) => {
@@ -56,6 +76,14 @@ const AppContextProvider = ({ children }) => {
 
   }
 
+  // useEffect(() => {
+  //   localStorage.setItem('listOfTask',JSON.stringify(todoList))
+
+  // },[todoList]);
+
+  
+ 
+
 
 
   const contextValue = {
@@ -70,7 +98,13 @@ const AppContextProvider = ({ children }) => {
     setToggle,
     editTask,
     setEditTask,
-    handleSubmit
+    handleSubmit,
+    user,
+    loginWithRedirect,
+    isAuthenticated,
+    logout,
+    // getLocalItems,
+    
 
   };
 
