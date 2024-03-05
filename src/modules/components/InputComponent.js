@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import { AppContext } from '../../context/AppContextProvider';
 
+
 function InputComponent() {
   
   const { addTask, setTask, handleSubmit,toggle} = useContext(AppContext);
-
- 
 
   return (
     <div>
