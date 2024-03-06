@@ -7,11 +7,14 @@ const AppContextProvider = ({ children }) => {
   const [todoList, setTodoList] = useState([]);
   const [toggle, setToggle] = useState(true);
   const [editTask, setEditTask] = useState(null);
+  const [theme, setTheme] = useState("light");
 
   const getLocalItems = () => {
     try {
       const storedItems = localStorage.getItem('listOfTask');
       return storedItems ? JSON.parse(storedItems) : [];
+
+
     } catch (error) {
       console.error('Error retrieving data from local storage:', error);
       return [];
@@ -27,7 +30,7 @@ const AppContextProvider = ({ children }) => {
       console.error('Error setting todo list from local storage:', error);
     }
   }, []);
-  
+
 
   useEffect(() => {
     try {
@@ -86,6 +89,17 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
+  const themeToggle = () => {
+    try {
+      setTheme((current) =>
+        (current === "light" ? "dark" : "light")
+      );
+    }
+    catch (error) {
+      console.error('error in toggling:', error);
+    }
+  };
+
   const contextValue = {
     addTask,
     todoList,
@@ -100,6 +114,10 @@ const AppContextProvider = ({ children }) => {
     setEditTask,
     handleSubmit,
     getLocalItems,
+    theme,
+    setTheme,
+    themeToggle,
+
   };
 
   return (
