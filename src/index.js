@@ -1,14 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import App from './App';
+import AppContextProvider from './context/AppContextProvider'; // Correct import path
 
-
-
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.render(
   <React.StrictMode>
-   <App/>
-  </React.StrictMode> 
+    <AppContextProvider>
+      <App />
+    </AppContextProvider>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
-
-
