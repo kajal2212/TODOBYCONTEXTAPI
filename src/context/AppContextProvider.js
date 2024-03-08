@@ -8,6 +8,14 @@ const AppContextProvider = ({ children }) => {
   const [toggle, setToggle] = useState(true);
   const [editTask, setEditTask] = useState(null);
   const [theme, setTheme] = useState("light");
+  const [search, setSearch] = useState('');
+  const [showReactSwitch, setShowReactSwitch] = useState(false);
+  const [layout, setLayout] = useState(true);
+
+
+
+
+
 
   const getLocalItems = () => {
     try {
@@ -100,6 +108,24 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
+
+  const handleThemeButtonClick = () => {
+    setShowReactSwitch(prevState => !prevState);
+  };
+
+  const handleViewChange = (e) => {
+    const selectedView = e.target.value;
+    if (selectedView === 'list view') {
+      setLayout(true);
+    } else if (selectedView === 'card view') {
+      setLayout(false);
+    }
+  };
+
+
+
+
+
   const contextValue = {
     addTask,
     todoList,
@@ -117,6 +143,14 @@ const AppContextProvider = ({ children }) => {
     theme,
     setTheme,
     themeToggle,
+    search, setSearch,
+    showReactSwitch, setShowReactSwitch, handleThemeButtonClick,
+    layout, setLayout,
+    handleViewChange
+
+
+
+
 
   };
 
