@@ -5,18 +5,20 @@ import { AppContext } from '../../context/AppContextProvider';
 
 function ListComponent() {
 
-  const { todoList, removeTask, updateTask } = useContext(AppContext);
+  const { todoList, removeTask, updateTask, displayTask, search } = useContext(AppContext);
 
   return (
     <div className='showList' >
       <ul>
-        {todoList.map((listItem) => (
+
+        {displayTask.map((listItem) => (
           <li className='listContent' key={listItem.id}>
             {listItem.name}
             <MdDeleteSweep className='del-icon' onClick={() => removeTask(listItem.id)} />
             <FaRegEdit className='update' onClick={() => updateTask(listItem.id)} />
           </li>
         ))}
+        {search && displayTask.length === 0 && <p>No items found</p>}
       </ul>
     </div>
   );
