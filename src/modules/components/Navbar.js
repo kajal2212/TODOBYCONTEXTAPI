@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { TfiWrite } from "react-icons/tfi";
-import JsonData from "../../MockData.json";
 import { AppContext } from '../../context/AppContextProvider';
 import CardView from './CardView';
 import ReactSwitch from 'react-switch';

@@ -13,18 +13,16 @@ const AppContextProvider = ({ children }) => {
   const [layout, setLayout] = useState(true);
   const [filteredResults, setFilteredResults] = useState([]);
   const [searchValue, setSearchValue] = useState('');
+  const [page, setPage] = useState([]);
+  const [pageNo, setPageNo] = useState(0);
+  const [taskPerPage, setTaskPerPage] = useState(8);
+  const [displayTask, setDisplayTask] = useState([]);
 
-
-
-
-
-
+  // localStorage
   const getLocalItems = () => {
     try {
       const storedItems = localStorage.getItem('listOfTask');
       return storedItems ? JSON.parse(storedItems) : [];
-
-
     } catch (error) {
       console.error('Error retrieving data from local storage:', error);
       return [];
@@ -41,7 +39,6 @@ const AppContextProvider = ({ children }) => {
     }
   }, []);
 
-
   useEffect(() => {
     try {
       localStorage.setItem('listOfTask', JSON.stringify(todoList));
@@ -49,7 +46,8 @@ const AppContextProvider = ({ children }) => {
       console.error('Error storing todo list in local storage:', error);
     }
   }, [todoList]);
-
+  
+  // addTask
   const handleSubmit = (e) => {
     e.preventDefault();
     addTodo(addTask);
@@ -79,6 +77,7 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
+  // removeTask
   const removeTask = (id) => {
     try {
       const newList = todoList.filter((listItem) => listItem.id !== id);
@@ -87,7 +86,8 @@ const AppContextProvider = ({ children }) => {
       console.error('Error removing todo item:', error);
     }
   };
-
+ 
+  // updateTask
   const updateTask = (id) => {
     try {
       let newUpdatedTask = todoList.find((listItem) => listItem.id === id);
@@ -99,22 +99,20 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
+  // themeToggle
   const themeToggle = () => {
     try {
-      setTheme((current) =>
-        (current === "light" ? "dark" : "light")
-      );
-    }
-    catch (error) {
+      setTheme((current) => (current === "light" ? "dark" : "light"));
+    } catch (error) {
       console.error('error in toggling:', error);
     }
   };
-
 
   const handleThemeButtonClick = () => {
     setShowReactSwitch(prevState => !prevState);
   };
 
+  // viewChange
   const handleViewChange = (e) => {
     const selectedView = e.target.value;
     if (selectedView === 'list view') {
@@ -123,7 +121,8 @@ const AppContextProvider = ({ children }) => {
       setLayout(false);
     }
   };
-
+  
+  // search
   const searchTask = (searchValue) => {
     console.log("Search Value:", searchValue);
     setSearch(searchValue);
@@ -144,15 +143,24 @@ const AppContextProvider = ({ children }) => {
     searchTask(searchValue);
   };
 
-  const displayTask = search ? filteredResults : todoList;
+  useEffect(() => {
+    const updatedDisplayTask = search ? filteredResults : todoList;
+    setDisplayTask(updatedDisplayTask);
+  }, [search, filteredResults, todoList]);
 
+  // pagination
+  const pagesVisited = pageNo * taskPerPage;
+  const pageCount = Math.ceil(displayTask.length / taskPerPage);
+  const changePage = ({ selected }) => {
+    setPageNo(selected);
+  }
 
+  useEffect(() => {
+    setPage(displayTask);
+  }, [displayTask]);
 
-
-
-
-
-
+  const isFirstPage = pagesVisited === 0;
+  const isLastPage = pagesVisited + taskPerPage >= displayTask.length;
 
   const contextValue = {
     addTask,
@@ -171,18 +179,31 @@ const AppContextProvider = ({ children }) => {
     theme,
     setTheme,
     themeToggle,
-    search, setSearch,
-    showReactSwitch, setShowReactSwitch, handleThemeButtonClick,
-    layout, setLayout,
+    search,
+    setSearch,
+    showReactSwitch,
+    setShowReactSwitch,
+    handleThemeButtonClick,
+    layout,
+    setLayout,
     handleViewChange,
-    filteredResults, setFilteredResults, searchTask, searchValue, setSearchValue,
+    filteredResults,
+    setFilteredResults,
+    searchTask,
+    searchValue,
+    setSearchValue,
     displayTask,
-    handleSearchChange
-
-
-
-
-
+    setDisplayTask,
+    handleSearchChange,
+    page,
+    setPage,
+    pageNo,
+    setPageNo,
+    pagesVisited,
+    pageCount,
+    changePage, taskPerPage,
+    setTaskPerPage,
+    isFirstPage, isLastPage,
   };
 
   return (

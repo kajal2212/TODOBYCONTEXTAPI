@@ -13,7 +13,7 @@
 
 /* input css */
 .inputItems{
-  margin-top: 90px;
+  margin-top: 40px;
 }
 
 label{
@@ -25,13 +25,27 @@ input{
 }
 
 /* list css */
-
-.showList{
+.showList {
   display: flex;
-
+  justify-content: flex-start;
+  flex-wrap: wrap; /* Center the list horizontally */
 }
-.listContent{
+
+.listContent {
+  width: 300px; /* Adjust the width of list items */
+  padding: 10px;
+  background-color: #4DB6AC;
+  border: 1px solid black;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between; /* Distribute content evenly */
+  align-items: center;
+  text-align: center;
+}
+
+.taskContent{
   flex: 1;
+  text-align: center;
 }
 
 ul{
@@ -40,7 +54,7 @@ ul{
   width: 262px;
   align-items: center;
   justify-content: center;
-  margin: 20px 596px;
+  margin: 4px 556px;
  
  
 }
@@ -52,6 +66,7 @@ ul li{
   background-color: #4DB6AC;
   border: 1px solid black;
   margin-bottom: 8px;
+  height: 9px;
  
   
  
@@ -165,12 +180,37 @@ nav ul li {
   margin: -45px 6px;
 }
 
+/* pagination */
+.pagination {
+  display: flex;
+  justify-content: center; /* Center the pagination */
+  margin-top: 190px;
+  margin-left: 31px;
+}
 
+.pagination ul {
+  display: flex;
+  list-style: none;
+  
+}
 
+.pagination li {
+  margin: 0 5px;
+  height: 23px;
+  background-color: #a1887f;
+}
 
+.pagination a {
+  padding: 5px 10px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
 
-
-
-
-
-
+.pagination a:hover {
+  background-color: #ff9800;
+  color: #fff;
+}
+.hidden{
+  display: none;
+}
