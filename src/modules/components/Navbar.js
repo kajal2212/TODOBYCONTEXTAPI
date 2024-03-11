@@ -9,7 +9,8 @@ import ListComponent from './ListComponent';
 function Navbar() {
 
   const { search, setSearch, handleThemeButtonClick, showReactSwitch, theme, themeToggle,
-    handleViewChange, handleSearchChange } = useContext(AppContext);
+    handleViewChange, handleSearchChange,showCompletedTask,showIncompletedTask,handleFilterChange } = useContext(AppContext);
+
   return (
     <nav>
       <ul>
@@ -26,7 +27,12 @@ function Navbar() {
           <button onClick={() => setSearch("")}>reset</button>
 
         </li>
-        <li><button>filter</button></li>
+        <li><select onChange={handleFilterChange}>
+          <option hidden>filter</option>
+          <option onClick={showCompletedTask} >completed task</option>
+          <option onClick={showIncompletedTask}>incompleted task</option>
+        </select></li>
+
         <li><select onChange={handleViewChange}>
           <option hidden>view</option>
           <option>list view</option>

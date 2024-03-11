@@ -6,14 +6,20 @@ import ReactPaginate from 'react-paginate';
 
 function ListComponent() {
   const { removeTask, updateTask, displayTask, search, pagesVisited, taskPerPage, pageCount, changePage,
-    isLastPage, isFirstPage } = useContext(AppContext);
-  
-    return (
-   
-   <div className='showList'>
+    isLastPage, isFirstPage,selectedTask, handleSaveTask } = useContext(AppContext);
+    
+
+  return (
+
+    <div className='showList'>
       <ul>
-        {displayTask.slice(pagesVisited, pagesVisited + taskPerPage).map((listItem) => (
+       
+        { 
+        displayTask.slice(pagesVisited, pagesVisited + taskPerPage).map((listItem) => (
+          
           <li className='listContent' key={listItem.id}>
+            <input type='radio'  checked={selectedTask.includes(listItem.id)}
+              onChange={() => handleSaveTask(listItem.id, listItem.name, listItem.status=true)} />
             <span className='taskContent'>{listItem.name}</span>
             <FaRegEdit className='update' onClick={() => updateTask(listItem.id)} />
             <MdDeleteSweep className='del-icon' onClick={() => removeTask(listItem.id)} />

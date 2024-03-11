@@ -17,6 +17,11 @@ const AppContextProvider = ({ children }) => {
   const [pageNo, setPageNo] = useState(0);
   const [taskPerPage, setTaskPerPage] = useState(8);
   const [displayTask, setDisplayTask] = useState([]);
+  const [selectedTask, setSelectedTask] = useState([]);
+  const [newList, setNewList] = useState(displayTask)
+
+
+
 
   // localStorage
   const getLocalItems = () => {
@@ -29,9 +34,11 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
+
   useEffect(() => {
     try {
       const localItems = getLocalItems();
+      setNewList(localItems);
       setTodoList(prevTodoList => [...prevTodoList, ...localItems]);
       console.log('Todo list after setting from local storage:', localItems);
     } catch (error) {
@@ -39,6 +46,8 @@ const AppContextProvider = ({ children }) => {
     }
   }, []);
 
+
+  console.log("this is new list", newList)
   useEffect(() => {
     try {
       localStorage.setItem('listOfTask', JSON.stringify(todoList));
@@ -46,7 +55,7 @@ const AppContextProvider = ({ children }) => {
       console.error('Error storing todo list in local storage:', error);
     }
   }, [todoList]);
-  
+
   // addTask
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,6 +64,7 @@ const AppContextProvider = ({ children }) => {
   };
 
   const addTodo = (newTodoList) => {
+    console.warn(newTodoList);
     try {
       if (!newTodoList) {
         alert('Please fill the task');
@@ -69,7 +79,7 @@ const AppContextProvider = ({ children }) => {
         );
         setToggle(true);
       } else {
-        const allNewTodoList = { id: new Date().getTime().toString(), name: newTodoList };
+        const allNewTodoList = { id: new Date().getTime().toString(), name: newTodoList, status: false };
         setTodoList((prevTodoList) => [...prevTodoList, allNewTodoList]);
       }
     } catch (error) {
@@ -86,7 +96,7 @@ const AppContextProvider = ({ children }) => {
       console.error('Error removing todo item:', error);
     }
   };
- 
+
   // updateTask
   const updateTask = (id) => {
     try {
@@ -121,7 +131,7 @@ const AppContextProvider = ({ children }) => {
       setLayout(false);
     }
   };
-  
+
   // search
   const searchTask = (searchValue) => {
     console.log("Search Value:", searchValue);
@@ -161,6 +171,63 @@ const AppContextProvider = ({ children }) => {
 
   const isFirstPage = pagesVisited === 0;
   const isLastPage = pagesVisited + taskPerPage >= displayTask.length;
+
+  // filter
+
+  const handleSaveTask = (id, name, status) => {
+    setSelectedTask(prevSelectedTasks => {
+      if (prevSelectedTasks.includes(id)) {
+        return prevSelectedTasks.filter(taskId => taskId !== id);
+      } else {
+        return [...prevSelectedTasks, id];
+      }
+
+    });
+    console.log('Task saved:', id, name, status);
+  };
+
+
+  // Function to filter completed tasks saved by radio buttons
+
+
+  const showCompletedTask = () => {
+    const completedSavedTasks = newList.filter((task) => {
+      console.log(task.status);
+      if (task.status) {
+        console.log(task);
+        return task
+      }
+    })
+    setDisplayTask(completedSavedTasks);
+
+  };
+
+  // Function to filter incomplete tasks saved by radio buttons
+  const showIncompletedTask = () => {
+    const incompletedSavedTasks = newList.filter((task) => {
+      console.log(task.status);
+
+
+      if (task.status === false) {
+        console.log(task);
+        return task
+      }
+    })
+    setDisplayTask(incompletedSavedTasks);
+  };
+
+  const handleFilterChange = (e) => {
+    const selectedFilter = e.target.value;
+    if (selectedFilter === 'completed task') {
+      showCompletedTask();
+    } else if (selectedFilter === 'incompleted task') {
+      showIncompletedTask();
+    }
+  };
+
+
+
+
 
   const contextValue = {
     addTask,
@@ -204,6 +271,8 @@ const AppContextProvider = ({ children }) => {
     changePage, taskPerPage,
     setTaskPerPage,
     isFirstPage, isLastPage,
+    handleSaveTask, selectedTask, setSelectedTask,
+    showCompletedTask, showIncompletedTask, handleFilterChange,
   };
 
   return (

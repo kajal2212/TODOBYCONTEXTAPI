@@ -28,17 +28,17 @@ input{
 .showList {
   display: flex;
   justify-content: flex-start;
-  flex-wrap: wrap; /* Center the list horizontally */
+  flex-wrap: wrap;
 }
 
 .listContent {
-  width: 300px; /* Adjust the width of list items */
+  width: 300px; 
   padding: 10px;
   background-color: #4DB6AC;
   border: 1px solid black;
   border-radius: 5px;
   display: flex;
-  justify-content: space-between; /* Distribute content evenly */
+  justify-content: space-between; 
   align-items: center;
   text-align: center;
 }
@@ -146,12 +146,12 @@ nav ul li {
   width: 100%;
   margin: 0;
   padding: 0;
-  text-align: center; 
+  display: flex; 
+  flex-wrap: wrap; 
 }
 
 .card ul li {
-  display: inline-block; 
-  width: 262px;
+  width:19%;
   height: 124px;
   line-height: 124px;
   text-align: start;
@@ -164,13 +164,11 @@ nav ul li {
   font-size: 20px;
   cursor: pointer;
   margin-top: 20px;
-  
 }
 
 .cardUpdate {
   color: #455A64;
-  margin-left: 59px;
- 
+  margin-left: 6px;
 }
 
 .title {
@@ -180,10 +178,11 @@ nav ul li {
   margin: -45px 6px;
 }
 
+
 /* pagination */
 .pagination {
   display: flex;
-  justify-content: center; /* Center the pagination */
+  justify-content: center; 
   margin-top: 190px;
   margin-left: 31px;
 }
@@ -214,3 +213,43 @@ nav ul li {
 .hidden{
   display: none;
 }
+
+.paginationForCard {
+  display: flex;
+  justify-content: center; 
+  margin-top: 20px; 
+}
+
+.paginationForCard ul {
+  display: flex;
+  list-style: none;
+  width: 20%;
+ 
+}
+
+.paginationForCard li {
+  margin: 0 5px;
+  line-height: 20px;
+  height: 85px!important;
+  background-color: #a1887f;
+  border-radius: 5px; 
+}
+
+.paginationForCard a {
+  padding: 52px 15px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+  
+}
+
+.paginationForCard a:hover {
+  
+  color: #fff;
+}
+
+.hidden {
+  display: none; 
+}
+
+
