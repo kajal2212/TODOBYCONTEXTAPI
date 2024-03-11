@@ -1,13 +1,10 @@
-body{
+.App {
+  text-align: center;
   background-color: #607d8b;
   color: #FAFAFA;
   font-size: 18px;
   font-family: math;
-}
-
-
-.App {
-  text-align: center;
+  height: 100vh;
 }
 
 .App>h1{
@@ -15,6 +12,9 @@ body{
 }
 
 /* input css */
+.inputItems{
+  margin-top: 40px;
+}
 
 label{
   padding: 8px;
@@ -25,12 +25,27 @@ input{
 }
 
 /* list css */
-
-.showList{
+.showList {
   display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
 }
-.listContent{
+
+.listContent {
+  width: 300px; 
+  padding: 10px;
+  background-color: #4DB6AC;
+  border: 1px solid black;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  text-align: center;
+}
+
+.taskContent{
   flex: 1;
+  text-align: center;
 }
 
 ul{
@@ -39,7 +54,7 @@ ul{
   width: 262px;
   align-items: center;
   justify-content: center;
-  margin: 20px 596px;
+  margin: 4px 556px;
  
  
 }
@@ -51,6 +66,7 @@ ul li{
   background-color: #4DB6AC;
   border: 1px solid black;
   margin-bottom: 8px;
+  height: 9px;
  
   
  
@@ -80,5 +96,160 @@ ul li{
 
 }
 
+/* toggleSwitch css */
+
+
+
+/* Light theme */
+#light {
+  background-color: #607d8b;
+}
+
+
+/* Dark theme */
+#dark {
+  background-color: #616161;
+}
+
+.switch{
+  display: flex;
+  width: 100px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* navbar css */
+nav ul{
+  display: flex;
+  margin: 0 -40px;
+  width: 100%;
+  
+  
+}
+  
+nav ul li {
+  flex: 1;
+  padding: 0 0;
+  background-color:#ff00001a;
+  border: none;
+  height: 37px;
+  line-height: 1.8;
+ 
+
+
+}
+
+/* cardview css */
+
+.card ul {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: flex; 
+  flex-wrap: wrap; 
+}
+
+.card ul li {
+  width:19%;
+  height: 124px;
+  line-height: 124px;
+  text-align: start;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.card_DelIcon {
+  color: #D81B60;
+  font-size: 20px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.cardUpdate {
+  color: #455A64;
+  margin-left: 6px;
+}
+
+.title {
+  color: black;
+  font-size: 16px;
+  float: left;
+  margin: -45px 6px;
+}
+
+
+/* pagination */
+.pagination {
+  display: flex;
+  justify-content: center; 
+  margin-top: 190px;
+  margin-left: 31px;
+}
+
+.pagination ul {
+  display: flex;
+  list-style: none;
+  
+}
+
+.pagination li {
+  margin: 0 5px;
+  height: 23px;
+  background-color: #a1887f;
+}
+
+.pagination a {
+  padding: 5px 10px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+.pagination a:hover {
+  background-color: #ff9800;
+  color: #fff;
+}
+.hidden{
+  display: none;
+}
+
+.paginationForCard {
+  display: flex;
+  justify-content: center; 
+  margin-top: 20px; 
+}
+
+.paginationForCard ul {
+  display: flex;
+  list-style: none;
+  width: 20%;
+ 
+}
+
+.paginationForCard li {
+  margin: 0 5px;
+  line-height: 20px;
+  height: 85px!important;
+  background-color: #a1887f;
+  border-radius: 5px; 
+}
+
+.paginationForCard a {
+  padding: 52px 15px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+  
+}
+
+.paginationForCard a:hover {
+  
+  color: #fff;
+}
+
+.hidden {
+  display: none; 
+}
 
 

@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 export const AppContext = createContext();
 
@@ -7,54 +7,225 @@ const AppContextProvider = ({ children }) => {
   const [todoList, setTodoList] = useState([]);
   const [toggle, setToggle] = useState(true);
   const [editTask, setEditTask] = useState(null);
+  const [theme, setTheme] = useState("light");
+  const [search, setSearch] = useState('');
+  const [showReactSwitch, setShowReactSwitch] = useState(false);
+  const [layout, setLayout] = useState(true);
+  const [filteredResults, setFilteredResults] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [page, setPage] = useState([]);
+  const [pageNo, setPageNo] = useState(0);
+  const [taskPerPage, setTaskPerPage] = useState(8);
+  const [displayTask, setDisplayTask] = useState([]);
+  const [selectedTask, setSelectedTask] = useState([]);
+  const [newList, setNewList] = useState(displayTask)
 
+
+
+
+  // localStorage
+  const getLocalItems = () => {
+    try {
+      const storedItems = localStorage.getItem('listOfTask');
+      return storedItems ? JSON.parse(storedItems) : [];
+    } catch (error) {
+      console.error('Error retrieving data from local storage:', error);
+      return [];
+    }
+  };
+
+
+  useEffect(() => {
+    try {
+      const localItems = getLocalItems();
+      setNewList(localItems);
+      setTodoList(prevTodoList => [...prevTodoList, ...localItems]);
+      console.log('Todo list after setting from local storage:', localItems);
+    } catch (error) {
+      console.error('Error setting todo list from local storage:', error);
+    }
+  }, []);
+
+
+  console.log("this is new list", newList)
+  useEffect(() => {
+    try {
+      localStorage.setItem('listOfTask', JSON.stringify(todoList));
+    } catch (error) {
+      console.error('Error storing todo list in local storage:', error);
+    }
+  }, [todoList]);
+
+  // addTask
   const handleSubmit = (e) => {
     e.preventDefault();
-    addTodo(addTask); 
-    setTask("");
+    addTodo(addTask);
+    setTask('');
   };
-
 
   const addTodo = (newTodoList) => {
-    if (!newTodoList) {
-
-      alert("please fill the task");
-
-    }
-    else if (newTodoList && !toggle) {
-      
-      setTodoList(
-        todoList.map((listItem) => {
-          if (listItem.id === editTask) {
-            return { ...listItem, name: newTodoList }
-          }
-          return listItem;
-        }
-        )
-      )
-      setToggle(true);
-
-    }
-    else {
-      const allNewTodoList = { id: new Date().getTime().toString(), name: newTodoList }
-      setTodoList([...todoList, allNewTodoList]);
+    console.warn(newTodoList);
+    try {
+      if (!newTodoList) {
+        alert('Please fill the task');
+      } else if (newTodoList && !toggle) {
+        setTodoList((prevTodoList) =>
+          prevTodoList.map((listItem) => {
+            if (listItem.id === editTask) {
+              return { ...listItem, name: newTodoList };
+            }
+            return listItem;
+          })
+        );
+        setToggle(true);
+      } else {
+        const allNewTodoList = { id: new Date().getTime().toString(), name: newTodoList, status: false };
+        setTodoList((prevTodoList) => [...prevTodoList, allNewTodoList]);
+      }
+    } catch (error) {
+      console.error('Error adding todo item:', error);
     }
   };
 
-  const removeTask = (index) => {
-    const newList = todoList.filter((listItem) => { return index !== listItem.id });
-    setTodoList(newList);
+  // removeTask
+  const removeTask = (id) => {
+    try {
+      const newList = todoList.filter((listItem) => listItem.id !== id);
+      setTodoList(newList);
+    } catch (error) {
+      console.error('Error removing todo item:', error);
+    }
   };
 
+  // updateTask
   const updateTask = (id) => {
-    let newUpdatedTask = todoList.find((listItem) => {
-      return listItem.id === id
-    });
-    setToggle(false);
-    setTask(newUpdatedTask.name);
-    setEditTask(id);
+    try {
+      let newUpdatedTask = todoList.find((listItem) => listItem.id === id);
+      setToggle(false);
+      setTask(newUpdatedTask.name);
+      setEditTask(id);
+    } catch (error) {
+      console.error('Error updating todo item:', error);
+    }
+  };
 
+  // themeToggle
+  const themeToggle = () => {
+    try {
+      setTheme((current) => (current === "light" ? "dark" : "light"));
+    } catch (error) {
+      console.error('error in toggling:', error);
+    }
+  };
+
+  const handleThemeButtonClick = () => {
+    setShowReactSwitch(prevState => !prevState);
+  };
+
+  // viewChange
+  const handleViewChange = (e) => {
+    const selectedView = e.target.value;
+    if (selectedView === 'list view') {
+      setLayout(true);
+    } else if (selectedView === 'card view') {
+      setLayout(false);
+    }
+  };
+
+  // search
+  const searchTask = (searchValue) => {
+    console.log("Search Value:", searchValue);
+    setSearch(searchValue);
+    if (searchValue === '') {
+      setFilteredResults(todoList);
+    } else {
+      const filtered = todoList.filter((listItem) =>
+        listItem.name.toLowerCase().includes(searchValue.toLowerCase())
+      );
+      console.log("Filtered Results:", filtered);
+      setFilteredResults(filtered);
+    }
+  };
+
+  const handleSearchChange = (event) => {
+    const searchValue = event.target.value;
+    console.log("Handling Change - Search Value:", searchValue)
+    searchTask(searchValue);
+  };
+
+  useEffect(() => {
+    const updatedDisplayTask = search ? filteredResults : todoList;
+    setDisplayTask(updatedDisplayTask);
+  }, [search, filteredResults, todoList]);
+
+  // pagination
+  const pagesVisited = pageNo * taskPerPage;
+  const pageCount = Math.ceil(displayTask.length / taskPerPage);
+  const changePage = ({ selected }) => {
+    setPageNo(selected);
   }
+
+  useEffect(() => {
+    setPage(displayTask);
+  }, [displayTask]);
+
+  const isFirstPage = pagesVisited === 0;
+  const isLastPage = pagesVisited + taskPerPage >= displayTask.length;
+
+  // filter
+
+  const handleSaveTask = (id, name, status) => {
+    setSelectedTask(prevSelectedTasks => {
+      if (prevSelectedTasks.includes(id)) {
+        return prevSelectedTasks.filter(taskId => taskId !== id);
+      } else {
+        return [...prevSelectedTasks, id];
+      }
+
+    });
+    console.log('Task saved:', id, name, status);
+  };
+
+
+  // Function to filter completed tasks saved by radio buttons
+
+
+  const showCompletedTask = () => {
+    const completedSavedTasks = newList.filter((task) => {
+      console.log(task.status);
+      if (task.status) {
+        console.log(task);
+        return task
+      }
+    })
+    setDisplayTask(completedSavedTasks);
+
+  };
+
+  // Function to filter incomplete tasks saved by radio buttons
+  const showIncompletedTask = () => {
+    const incompletedSavedTasks = newList.filter((task) => {
+      console.log(task.status);
+
+
+      if (task.status === false) {
+        console.log(task);
+        return task
+      }
+    })
+    setDisplayTask(incompletedSavedTasks);
+  };
+
+  const handleFilterChange = (e) => {
+    const selectedFilter = e.target.value;
+    if (selectedFilter === 'completed task') {
+      showCompletedTask();
+    } else if (selectedFilter === 'incompleted task') {
+      showIncompletedTask();
+    }
+  };
+
+
 
 
 
@@ -70,8 +241,38 @@ const AppContextProvider = ({ children }) => {
     setToggle,
     editTask,
     setEditTask,
-    handleSubmit
-
+    handleSubmit,
+    getLocalItems,
+    theme,
+    setTheme,
+    themeToggle,
+    search,
+    setSearch,
+    showReactSwitch,
+    setShowReactSwitch,
+    handleThemeButtonClick,
+    layout,
+    setLayout,
+    handleViewChange,
+    filteredResults,
+    setFilteredResults,
+    searchTask,
+    searchValue,
+    setSearchValue,
+    displayTask,
+    setDisplayTask,
+    handleSearchChange,
+    page,
+    setPage,
+    pageNo,
+    setPageNo,
+    pagesVisited,
+    pageCount,
+    changePage, taskPerPage,
+    setTaskPerPage,
+    isFirstPage, isLastPage,
+    handleSaveTask, selectedTask, setSelectedTask,
+    showCompletedTask, showIncompletedTask, handleFilterChange,
   };
 
   return (
